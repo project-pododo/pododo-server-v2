@@ -70,7 +70,7 @@
 https://documenter.getpostman.com/view/42559961/2sAYdfrBJh
 
 **Swagger** <br>
-http://35.216.79.192/swagger-ui/index.html
+https://pododo.xyz/swagger-ui/index.html
 
 ---
 ## Convention
