@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(mfwpY6Fe9k5efKMa6Hxg9lSjkbyCrEHmuAaQhR3hB9dXgYQNlkk6ycZQQu6IFykYLJogn36Uw6907DZqntPEDsE+AYBdaEww2RjNqbup1RaCXsGH7+EI0eZCbEGsy83F)
+    username: ENC(gq/ybhP706qRlh2nBaOdfsISNm4ckXLsjkiTP+ZWy3DjtBhpfy00R5i5SkfI5Pz7)
+    password: ENC(CZvoqUNMk4OS2nOV4G8c8cJfI/y0kd0ezlVLL4BYSzw4wONOnPlskSF/nGKWjAG0)
+    data-source-properties:
+      rewriteBatchedStatements: true
+    hikari:
+      maximum-pool-size: 5
+      pool-name: HikariPool-1
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 100
+          order_inserts: true
+          order_updates: true

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true"> <!-- debug 삭제 -->
+
+    <!-- 로그 파일 저장 경로 및 파일명 설정 -->
+    <property name="LOG_PATH" value="/home/pododo/pododo/log" />
+    <property name="LOG_FILE_NAME" value="pododo-server"/>
+    <property name="CHARSET" value="UTF-8" />
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%-5level]) [%relative] [%thread] %cyan(%logger{100}) %yellow(%method:%line) - %msg%n" />
+
+    <!-- 콘솔 출력 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>${LOG_PATTERN}</Pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <!-- 파일 저장 Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 로그 파일 롤링 정책 (매일 새로운 파일 생성) -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>${LOG_PATTERN}</Pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    <!-- 로그 레벨 설정 -->
+    <root level="INFO">
+        <springProfile name="local,dev,prod">
+            <appender-ref ref="CONSOLE" />
+        </springProfile>
+        <springProfile name="dev,prod">
+            <appender-ref ref="FILE" />
+        </springProfile>
+    </root>
+
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.type.descriptor.sql" level="TRACE"/>
+
+</configuration>
