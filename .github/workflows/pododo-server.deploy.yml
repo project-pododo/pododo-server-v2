@@ -19,9 +19,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Grant execute permission to gradlew
-        run: chmod +x ./gradlew
-
       - name: Build Spring Boot Project
         run: ./gradlew clean build -Dspring.profiles.active=prod -Djasypt.encryptor.password=${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
 
