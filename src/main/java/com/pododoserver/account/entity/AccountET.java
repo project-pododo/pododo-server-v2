@@ -1,5 +1,6 @@
 package com.pododoserver.account.entity;
 
+import com.pododoserver.account.constant.Role;
 import com.pododoserver.common.entity.BaseET;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,12 +23,19 @@ public class AccountET extends BaseET {
     @Column(name = "account_login_id", nullable = false, length = 20, unique = true)
     private String accountLoginId;
 
-    @Column(name = "account_login_pw", nullable = false, length = 50)
-    private String accountLoginPw;
+    @Column(name = "account_email", nullable = false, length = 20)
+    private String accountEmail;
 
+    @Column(name = "provider", nullable = false, length = 20, unique = true)
+    private String provider;
 
-    public void updatePw(String newPw) {
-        this.accountLoginPw = newPw;
-    }
+    @Column(name = "provider_id", nullable = false, length = 20)
+    private String providerId;
 
+    @Column(name = "account_name", nullable = false, length = 20)
+    private String accountName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role; // USER, ADMIN 등
 }

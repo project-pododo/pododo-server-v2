@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ENC(a24511OJKzMFth9xEpUkL+fWNe9YBz4vSVfMdq7dXLDgdmObgsWqye5FiIS9wZ0jdIgK9Vy80Opk01KuswZ8DlrXLsgbD0b5)
+    url: ENC(WgMncfCmoCj5mhZRNWFA9PUvBes3AkGy1gzgKylHaZmAKP2pKOu3tD62YsaDWIklMBXfawvnmuU5u7bV8C/4iDE6V03Ed/TD)
     username: ENC(49RyIyDBsjwtsVUdu7jBew==)
     password: ENC(ZQrEq+x62sHxv5Tju52Ty7cECr4mZea3)
     data-source-properties:
@@ -9,3 +9,14 @@ spring:
     hikari:
       maximum-pool-size: 5
       pool-name: HikariPool-1
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id:
+            client-secret:
+            redirect-uri:
+            scope:
+              - email
+              - profile
