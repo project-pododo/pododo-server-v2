@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v2/account")
 public class AccountController extends BaseController {
 
-
     @PostMapping("/oauth/google")
     public ResponseEntity<?> googleOAuth2Login(@RequestBody OAuthRequest request) {
         GoogleOAuthDto dto = new GoogleOAuthDto(request.getCode(), request.getState());
