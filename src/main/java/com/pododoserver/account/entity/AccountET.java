@@ -20,16 +20,19 @@ public class AccountET extends BaseET {
     @Column(name = "account_mst_id", nullable = false, updatable = false)
     private Long accountMstId;
 
-    @Column(name = "account_login_id", nullable = false, length = 20, unique = true)
+    @Column(name = "account_login_id", nullable = false, length = 20)
     private String accountLoginId;
+
+    @Column(name = "account_login_pw", nullable = false, length = 50)
+    private String accountLoginPw;
 
     @Column(name = "account_email", nullable = false, length = 20)
     private String accountEmail;
 
-    @Column(name = "provider", nullable = false, length = 20, unique = true)
+    @Column(name = "provider", length = 20)
     private String provider;
 
-    @Column(name = "provider_id", nullable = false, length = 20)
+    @Column(name = "provider_id", length = 20)
     private String providerId;
 
     @Column(name = "account_name", nullable = false, length = 20)
@@ -38,4 +41,12 @@ public class AccountET extends BaseET {
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private Role role; // USER, ADMIN 등
+
+    public void updatePw(String newPw) {
+        this.accountLoginPw = newPw;
+    }
+
+    public void updateName(String newName) {
+        this.accountName = newName;
+    }
 }

@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AccountMstRepository extends JpaRepository<AccountET, Long> {
     Optional<AccountET> findByProviderAndProviderId(String provider, String providerId);
+    Optional<AccountET> findByAccountLoginId(String accountLoginId);
 }

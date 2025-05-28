@@ -17,4 +17,7 @@ public class AccountImplService {
     public AccountET findById(Long accountMstId){
         return accountMstRepository.findById(accountMstId).orElse(null);
     }
+    public AccountET save(AccountET entity) {
+        return accountMstRepository.save(entity);
+    }
 }

@@ -9,22 +9,8 @@ spring:
     hikari:
       maximum-pool-size: 5
       pool-name: HikariPool-1
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id:
-            client-secret:
-            redirect-uri: "{baseUrl}/login/oauth2/code/google"
-            scope:
-              - email
-              - profile
 
-pododo:
-  jwt:
-    secret:
-    expiration: 3600000
-  oauth2:
-    #redirect-uri: https://pododo.xyz/oauth2/redirect
-    redirect-uri: {baseUrl}/oauth2/redirect
+
+jwt:
+  secret-key:
+  token-validity-ms: 600000
