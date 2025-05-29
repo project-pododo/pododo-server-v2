@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AccountImplService {
+public class AccountServiceImpl {
 
     private final AccountMstRepository accountMstRepository;
 

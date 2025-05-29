@@ -23,7 +23,8 @@ public enum ErrorMessage {
     INVALID_RANGE_DATE_PARAM("91003", "유효하지 않은 날짜 범위입니다."),
     INVALID_UPDATE("91004", "변경할 수 없는 상태입니다."),
 
-    NOT_FOUND_DATA("92000", "회원정보가 존재 하지 않습니다.")
+    NOT_FOUND_DATA("92000", "회원정보가 존재 하지 않습니다."),
+    NOT_CORRECT_PASSWORD("92001", "비밀번호가 일치하지 않습니다.")
     ;
 
     private static final Map<String, ErrorMessage> map = Stream.of(values())

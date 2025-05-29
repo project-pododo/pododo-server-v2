@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -16,6 +18,21 @@ import org.springframework.web.context.request.WebRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<BaseResponseDTO<Void>> handleUsernameNotFoundException(UsernameNotFoundException e) {
+        BaseResponseDTO errorRes = new BaseResponseDTO<>();
+        errorRes.setResponseErrorMessage(ErrorMessage.NOT_FOUND_DATA);
+        return getResponse(e, errorRes);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<BaseResponseDTO<Void>> handleBadCredentialsException(BadCredentialsException e) {
+        BaseResponseDTO errorRes = new BaseResponseDTO<>();
+        errorRes.setResponseErrorMessage(ErrorMessage.NOT_CORRECT_PASSWORD);
+        return getResponse(e, errorRes);
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<BaseResponseDTO<Void>> handleIllegalArgumentException(IllegalArgumentException e) {

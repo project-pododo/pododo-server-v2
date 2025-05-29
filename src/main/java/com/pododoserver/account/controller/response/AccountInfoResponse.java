@@ -7,12 +7,12 @@ import lombok.Getter;
 @Getter
 public class AccountInfoResponse {
 
-    private Long   accountMstId;
-    private String accountLoginId;
-    private String accountLoginPassword;
-    private String accountEmail;
-    private Role role;
-    private String accountName;
+    private final Long accountMstId;
+    private final String accountLoginId;
+    private final String accountLoginPassword;
+    private final String accountEmail;
+    private final Role role;
+    private final String accountName;
 
     public AccountInfoResponse(AccountET e) {
         this.accountMstId = e.getAccountMstId();

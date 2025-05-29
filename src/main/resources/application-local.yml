@@ -13,4 +13,3 @@ spring:
 
 jwt:
   secret-key:
-  token-validity-ms: 600000

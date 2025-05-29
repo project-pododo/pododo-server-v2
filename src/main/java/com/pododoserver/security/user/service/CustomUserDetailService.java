@@ -1,8 +1,9 @@
-package com.pododoserver.security.user;
+package com.pododoserver.security.user.service;
 
 
 import com.pododoserver.account.entity.AccountET;
 import com.pododoserver.account.repository.AccountMstRepository;
+import com.pododoserver.security.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,16 +16,12 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailService implements UserDetailsService {
 
 
-    private final AccountMstRepository repo;
+    private final AccountMstRepository accountMstRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        AccountET e = repo.findByAccountLoginId(username)
-                .orElseThrow(() -> new UsernameNotFoundException("해당 계정이 없습니다."));
-        return User.builder()
-                .username(e.getAccountLoginId())
-                .password(e.getAccountLoginPw())   // 암호화된 비밀번호
-                .roles(e.getRole().name())
-                .build();
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        AccountET account = accountMstRepository.findByAccountLoginId(username)
+                .orElseThrow(() -> new UsernameNotFoundException("사용자["+username+"]를 찾을 수 없습니다."));
+        return new CustomUserDetails(account);
     }
 }
