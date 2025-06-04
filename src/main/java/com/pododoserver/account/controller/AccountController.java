@@ -37,7 +37,7 @@ public class AccountController extends BaseController {
 
     @Operation(summary = "회원가입")
     @PostMapping
-    public ResponseEntity<BaseResponseDTO<Object>> register(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<Void>> register(WebRequest webReq,
                                                             @RequestBody AccountRegisterRequest request) {
         request.validate();
         accountService.registerAccount(request.toDto());
@@ -46,7 +46,7 @@ public class AccountController extends BaseController {
 
     @Operation(summary = "회원정보 수정")
     @PutMapping
-    public ResponseEntity<BaseResponseDTO<Object>> modify(WebRequest webReq,
+    public ResponseEntity<BaseResponseDTO<Void>> modify(WebRequest webReq,
                                                           @RequestBody AccountModifyRequest request) {
         request.validate();
         accountService.updateAccount(request.toDto());
