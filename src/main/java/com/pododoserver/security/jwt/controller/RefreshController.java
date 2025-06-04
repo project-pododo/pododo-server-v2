@@ -27,4 +27,14 @@ public class RefreshController extends BaseController {
 
         return getResOK(webRequest, BaseMessage.SUCCESS_OK, refreshTokenService.reIssue(refreshToken));
     }
+
+    @Operation(summary = "로그아웃")
+    @PostMapping("/logout")
+    public ResponseEntity<BaseResponseDTO<Void>> logout(WebRequest webRequest,
+                                                        @RequestHeader("Refresh-Token") String refreshToken) {
+
+        refreshTokenService.deleteRefreshToken(refreshToken);
+
+        return getResOK(webRequest, BaseMessage.SUCCESS_LOGOUT);
+    }
 }

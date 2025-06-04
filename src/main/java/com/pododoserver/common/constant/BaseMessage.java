@@ -18,6 +18,7 @@ public enum BaseMessage {
     SUCCESS_MODIFY("10002", "정상적으로 수정되었습니다."),
     SUCCESS_DELETE("10003", "정상적으로 삭제되었습니다."),
     SUCCESS_RESTORE("10004", "정상적으로 복구되었습니다."),
+    SUCCESS_LOGOUT("10005", "정상적으로 로그아웃되었습니다."),
     ;
 
     private static final Map<String, BaseMessage> map = Stream.of(values())

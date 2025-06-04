@@ -76,4 +76,19 @@ public class RefreshTokenService {
                 .tokenType("Bearer")
                 .build();
     }
+
+    @Transactional
+    public void deleteRefreshToken(String refreshToken) {
+
+        if (!StringUtils.hasText(refreshToken)) {
+            throw new BaseException(ErrorMessage.WRONG_TOKEN);
+        }
+
+        boolean exists = refreshTokenRepository.findByToken(refreshToken).isPresent();
+        if (!exists) {
+            throw new BaseException(ErrorMessage.UNAUTHORIZED_TOKEN);
+        }
+
+        refreshTokenRepository.deleteByToken(refreshToken);
+    }
 }
