@@ -1,7 +1,8 @@
 package com.pododoserver.security.jwt;
 
+import com.pododoserver.account.constant.Role;
+import com.pododoserver.account.entity.AccountET;
 import com.pododoserver.security.user.service.CustomUserDetailService;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,37 +34,40 @@ public class JwtTokenProvider {
     private Key key;
     private final CustomUserDetailService userDetailsService;
 
-
     @PostConstruct
     protected void init() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKeyBase64);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(Authentication authentication) {
-        String username = authentication.getName();
+    public String generateToken(AccountET account) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + ACCESS_TOKEN_EXPIRATION_MS);
 
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(account.getAccountLoginId())
+                .claim("accountMstId", account.getAccountMstId())
+                .claim("accountLoginId", account.getAccountLoginId())
+                .claim("role", account.getRole())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateRefreshToken(Authentication auth) {
+    public String generateRefreshToken(AccountET account) {
         Date now = new Date();
         Date expiry = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_MS);
         return Jwts.builder()
-                .setSubject(auth.getName())
+                .setSubject(account.getAccountLoginId())
+                .claim("accountMstId", account.getAccountMstId())
+                .claim("accountLoginId", account.getAccountLoginId())
+                .claim("role", account.getRole())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
-
 
     public Authentication getAuthentication(String token) {
         String username = getUsername(token);
@@ -84,30 +88,30 @@ public class JwtTokenProvider {
                 .getSubject();
     }
 
-    /** 토큰에서 만료 일시(Date) 반환 */
-    public Date getExpirationDateFromToken(String token) {
+    public Long getAccountMstId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .getExpiration();
+                .get("accountMstId", Long.class);
     }
-
-    /** 토큰에서 발급 일시(Date) 반환 */
-    public Date getIssuedAtDateFromToken(String token) {
+    public String getAccountLoginId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .getIssuedAt();
+                .get("accountLoginId", String.class);
     }
-
-    public long getRefreshTokenValidityInSeconds() {
-        return REFRESH_TOKEN_EXPIRATION_MS / 1_000;
+    public String getAccountRole(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
     }
-
 
     public boolean validateToken(String token) {
         try {
@@ -116,9 +120,12 @@ public class JwtTokenProvider {
                     .build()
                     .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException e) {
-        } catch (JwtException | IllegalArgumentException e) {
+        } catch (JwtException | IllegalArgumentException ignored) {
+
         }
+
         return false;
     }
+
+
 }

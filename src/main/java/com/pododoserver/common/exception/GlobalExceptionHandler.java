@@ -11,6 +11,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -18,6 +19,13 @@ import org.springframework.web.context.request.WebRequest;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<BaseResponseDTO<Void>> handleMissingRequestHeaderException(MissingRequestHeaderException e) {
+        BaseResponseDTO errorRes = new BaseResponseDTO<>();
+        errorRes.setResponseErrorMessage(ErrorMessage.MISSING_REQUEST_HEADER);
+        return getResponse(e, errorRes);
+    }
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<BaseResponseDTO<Void>> handleUsernameNotFoundException(UsernameNotFoundException e) {

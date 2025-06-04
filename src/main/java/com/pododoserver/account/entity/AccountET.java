@@ -13,6 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 @AllArgsConstructor
 @DynamicUpdate
 @Table(name = "account_mst")
+@ToString
 public class AccountET extends BaseET {
 
     @Id

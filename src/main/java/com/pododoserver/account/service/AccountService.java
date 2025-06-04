@@ -38,10 +38,12 @@ public class AccountService {
 
         Authentication auth = authManager.authenticate(authToken);
         CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
-        Long accountMstId = userDetails.getAccountMstId();
 
-        String accessToken  = jwtTokenProvider.generateToken(auth);
-        String refreshToken = jwtTokenProvider.generateRefreshToken(auth);
+        Long accountMstId = userDetails.getAccountMstId();
+        AccountET account = getAccountInfo(accountMstId);
+
+        String accessToken  = jwtTokenProvider.generateToken(account);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(account);
         refreshTokenService.saveRefreshToken(accountMstId, refreshToken);
 
         return JwtResponse.builder()

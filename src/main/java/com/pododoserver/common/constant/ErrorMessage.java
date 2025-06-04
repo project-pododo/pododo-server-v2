@@ -24,7 +24,11 @@ public enum ErrorMessage {
     INVALID_UPDATE("91004", "변경할 수 없는 상태입니다."),
 
     NOT_FOUND_DATA("92000", "회원정보가 존재 하지 않습니다."),
-    NOT_CORRECT_PASSWORD("92001", "비밀번호가 일치하지 않습니다.")
+    NOT_CORRECT_PASSWORD("92001", "비밀번호가 일치하지 않습니다."),
+
+    MISSING_REQUEST_HEADER("93000", "필수 헤더가 존재하지 않습니다."),
+    WRONG_TOKEN("93001", "잘못된 토큰입니다."),
+    UNAUTHORIZED_TOKEN("93002", "인증되지 않은 토큰입니다.");
     ;
 
     private static final Map<String, ErrorMessage> map = Stream.of(values())
