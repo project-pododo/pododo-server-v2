@@ -1,20 +1,98 @@
 package com.pododoserver.account.service;
 
+import com.pododoserver.account.constant.Role;
+import com.pododoserver.account.dto.AccountMstDto;
 import com.pododoserver.account.entity.AccountET;
+import com.pododoserver.common.exception.BaseException;
+import com.pododoserver.common.constant.ErrorMessage;
+import com.pododoserver.security.jwt.JwtTokenProvider;
+import com.pododoserver.security.jwt.controller.response.JwtResponse;
+import com.pododoserver.security.jwt.service.RefreshTokenService;
+import com.pododoserver.security.user.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
 
-    private final AccountImplService accountImplService;
+    private final AccountServiceImpl accountServiceImpl;
+    private final PasswordEncoder passwordEncoder;
+    private final RefreshTokenService refreshTokenService;
+    private final AuthenticationManager authManager;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public void getAccountInfoById() {
-        AccountET accountET = accountImplService.findById(1L);
-        System.out.println("");
+    public JwtResponse login(AccountMstDto accountMstDto) {
 
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(accountMstDto.getAccountLoginId(), accountMstDto.getAccountLoginPw());
+
+        Authentication auth = authManager.authenticate(authToken);
+        CustomUserDetails userDetails = (CustomUserDetails) auth.getPrincipal();
+
+        Long accountMstId = userDetails.getAccountMstId();
+        AccountET account = getAccountInfo(accountMstId);
+
+        String accessToken  = jwtTokenProvider.generateToken(account);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(account);
+        refreshTokenService.saveRefreshToken(accountMstId, refreshToken);
+
+        return JwtResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .tokenType("Bearer")
+                .build();
+    }
+
+    public void registerAccount(AccountMstDto dto) {
+
+        String encodedPw = passwordEncoder.encode(dto.getAccountLoginPw());
+        AccountET entity = AccountET.builder()
+                .accountLoginId(dto.getAccountLoginId())
+                .accountLoginPw(encodedPw)
+                .accountEmail(dto.getAccountEmail())
+                .accountName(dto.getAccountName())
+                .role(Role.USER)
+                .build();
+        accountServiceImpl.save(entity);
+    }
+
+    public void updateAccount(AccountMstDto dto) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long accountMstIdFromToken = ((CustomUserDetails) auth.getPrincipal()).getAccountMstId();
+
+        if (!accountMstIdFromToken.equals(dto.getAccountMstId())) {
+            throw new BaseException(ErrorMessage.UNAUTHORIZED_TOKEN_RIGHT);
+        }
+
+        AccountET entity = accountServiceImpl.findById(dto.getAccountMstId());
+        if (entity == null) {
+            throw new BaseException(ErrorMessage.NOT_FOUND_DATA);
+        }
+
+        String encodedPw = passwordEncoder.encode(dto.getAccountLoginPw());
+        entity.updatePw(encodedPw);
+        entity.updateName(dto.getAccountName());
+        entity.updateSchedulePeriod(dto.getSchedulePeriod());
+    }
+
+    @Transactional
+    public AccountET getAccountInfo(Long accountMstId) {
+
+        AccountET accountET = accountServiceImpl.findById(accountMstId);
+        if (accountET == null) {
+            throw new BaseException(ErrorMessage.NOT_FOUND_DATA);
+        }
+        return accountET;
     }
 }

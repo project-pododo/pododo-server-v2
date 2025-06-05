@@ -9,12 +9,15 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AccountImplService {
+public class AccountServiceImpl {
 
     private final AccountMstRepository accountMstRepository;
 
     // todo orElseThrow custom
     public AccountET findById(Long accountMstId){
         return accountMstRepository.findById(accountMstId).orElse(null);
+    }
+    public AccountET save(AccountET entity) {
+        return accountMstRepository.save(entity);
     }
 }
