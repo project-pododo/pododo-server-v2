@@ -38,7 +38,7 @@ public class AccountController extends BaseController {
     @Operation(summary = "회원가입")
     @PostMapping
     public ResponseEntity<BaseResponseDTO<Void>> register(WebRequest webReq,
-                                                            @RequestBody AccountRegisterRequest request) {
+                                                          @RequestBody AccountRegisterRequest request) {
         request.validate();
         accountService.registerAccount(request.toDto());
         return getResOK(webReq, BaseMessage.SUCCESS_REGISTER);
@@ -47,7 +47,7 @@ public class AccountController extends BaseController {
     @Operation(summary = "회원정보 수정")
     @PutMapping
     public ResponseEntity<BaseResponseDTO<Void>> modify(WebRequest webReq,
-                                                          @RequestBody AccountModifyRequest request) {
+                                                        @RequestBody AccountModifyRequest request) {
         request.validate();
         accountService.updateAccount(request.toDto());
         return getResOK(webReq, BaseMessage.SUCCESS_MODIFY);
@@ -56,7 +56,7 @@ public class AccountController extends BaseController {
     @Operation(summary = "계정정보 조회")
     @GetMapping("/{accountMstId}")
     public ResponseEntity<BaseResponseDTO<AccountInfoResponse>> info(WebRequest webReq,
-                                                        @PathVariable Long accountMstId) {
+                                                                     @PathVariable Long accountMstId) {
         return getResOK(webReq,
                 BaseMessage.SUCCESS_OK, AccountInfoResponse.of(accountService.getAccountInfo(accountMstId)));
     }

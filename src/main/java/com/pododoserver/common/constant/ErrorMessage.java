@@ -28,7 +28,8 @@ public enum ErrorMessage {
 
     MISSING_REQUEST_HEADER("93000", "필수 헤더가 존재하지 않습니다."),
     WRONG_TOKEN("93001", "잘못된 토큰입니다."),
-    UNAUTHORIZED_TOKEN("93002", "인증되지 않은 토큰입니다.");
+    UNAUTHORIZED_TOKEN("93002", "인증되지 않은 토큰입니다."),
+    UNAUTHORIZED_TOKEN_RIGHT("93003", "권한이 없습니다: 토큰 ID와 요청 ID 불일치");
     ;
 
     private static final Map<String, ErrorMessage> map = Stream.of(values())

@@ -13,10 +13,23 @@ public class AccountModifyRequest {
     private Long accountMstId;
     private String accountLoginPw;
     private String accountName;
+    private int schedulePeriod;
 
 
     public void validate() {
-        if (accountMstId == null) {
+        if (accountMstId == null || accountMstId < 0) {
+            throw new BaseException(ErrorMessage.REQUIRED_EMPTY_PARAM);
+        }
+
+        if (accountLoginPw == null || accountLoginPw.isBlank()) {
+            throw new BaseException(ErrorMessage.REQUIRED_EMPTY_PARAM);
+        }
+
+        if (accountName == null || accountName.isBlank()) {
+            throw new BaseException(ErrorMessage.REQUIRED_EMPTY_PARAM);
+        }
+
+        if (schedulePeriod <= 0) {
             throw new BaseException(ErrorMessage.REQUIRED_EMPTY_PARAM);
         }
     }
@@ -26,6 +39,7 @@ public class AccountModifyRequest {
                 .accountMstId(accountMstId)
                 .accountLoginPw(accountLoginPw)
                 .accountName(accountName)
+                .schedulePeriod(schedulePeriod)
                 .build();
     }
 }

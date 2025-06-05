@@ -43,11 +43,19 @@ public class AccountET extends BaseET {
     @Column(name = "role", nullable = false)
     private Role role; // USER, ADMIN 등
 
+    @Builder.Default
+    @Column(name = "schedule_period", nullable = false)
+    private int schedulePeriod = 15;
+
     public void updatePw(String newPw) {
         this.accountLoginPw = newPw;
     }
 
     public void updateName(String newName) {
         this.accountName = newName;
+    }
+
+    public void updateSchedulePeriod(int newSchedulePeriod) {
+        this.schedulePeriod = newSchedulePeriod;
     }
 }

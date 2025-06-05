@@ -12,4 +12,5 @@ public class AccountMstDto {
     private final String accountLoginPw;
     private final String accountEmail;
     private final String accountName;
+    private final int schedulePeriod;
 }

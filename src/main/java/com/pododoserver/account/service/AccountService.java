@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,21 +67,28 @@ public class AccountService {
     }
 
     public void updateAccount(AccountMstDto dto) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Long accountMstIdFromToken = ((CustomUserDetails) auth.getPrincipal()).getAccountMstId();
+
+        if (!accountMstIdFromToken.equals(dto.getAccountMstId())) {
+            throw new BaseException(ErrorMessage.UNAUTHORIZED_TOKEN_RIGHT);
+        }
+
         AccountET entity = accountServiceImpl.findById(dto.getAccountMstId());
         if (entity == null) {
             throw new BaseException(ErrorMessage.NOT_FOUND_DATA);
         }
-        if (dto.getAccountLoginPw() != null && !dto.getAccountLoginPw().isBlank()) {
-            String encodedPw = passwordEncoder.encode(dto.getAccountLoginPw());
-            entity.updatePw(encodedPw);
-        }
-        if (dto.getAccountName() != null) {
-            entity.updateName(dto.getAccountName());
-        }
+
+        String encodedPw = passwordEncoder.encode(dto.getAccountLoginPw());
+        entity.updatePw(encodedPw);
+        entity.updateName(dto.getAccountName());
+        entity.updateSchedulePeriod(dto.getSchedulePeriod());
     }
 
     @Transactional
     public AccountET getAccountInfo(Long accountMstId) {
+
         AccountET accountET = accountServiceImpl.findById(accountMstId);
         if (accountET == null) {
             throw new BaseException(ErrorMessage.NOT_FOUND_DATA);
